@@ -28,67 +28,8 @@ conn.commit()
 st.set_page_config(
     page_title="FixMyCampus",
     page_icon="🏫",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
-
-# ==================================================
-# CUSTOM STYLE
-# ==================================================
-
-st.markdown("""
-<style>
-
-.main {
-    background-color: #f7f9fc;
-}
-
-.block-container {
-    padding-top: 2rem;
-    padding-bottom: 3rem;
-}
-
-.hero {
-    padding: 2.5rem;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #1f4e79, #2f80ed);
-    color: white;
-    margin-bottom: 2rem;
-}
-
-.hero h1 {
-    font-size: 42px;
-    margin-bottom: 8px;
-}
-
-.hero p {
-    font-size: 18px;
-    margin-bottom: 0;
-}
-
-.card {
-    padding: 1.5rem;
-    border-radius: 16px;
-    border: 1px solid #e3e8ef;
-    background-color: white;
-    margin-bottom: 1rem;
-}
-
-.section-title {
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.footer {
-    text-align: center;
-    color: #777;
-    padding-top: 2rem;
-    font-size: 14px;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 # ==================================================
 # SESSION STATE
@@ -99,6 +40,134 @@ if "admin" not in st.session_state:
 
 if "page" not in st.session_state:
     st.session_state.page = "🏠 Home"
+
+# ==================================================
+# LIGHT THEME / VISIBILITY FIX
+# ==================================================
+
+st.markdown("""
+<style>
+
+/* Main page */
+.stApp {
+    background-color: #f5f7fb;
+    color: #172033;
+}
+
+/* Normal text */
+p, label, span, div {
+    color: #172033;
+}
+
+/* Headings */
+h1, h2, h3, h4 {
+    color: #102a43 !important;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #ffffff;
+    border-right: 1px solid #d9e2ec;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #172033 !important;
+}
+
+/* Hero */
+.hero {
+    background: linear-gradient(135deg, #155eef, #0b4f9c);
+    padding: 35px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+}
+
+.hero h1,
+.hero p {
+    color: white !important;
+}
+
+/* Cards */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #d9e2ec;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 15px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.card h2,
+.card h3,
+.card p {
+    color: #172033 !important;
+}
+
+/* Input boxes */
+input,
+textarea {
+    background-color: #ffffff !important;
+    color: #172033 !important;
+    border: 1px solid #9fb3c8 !important;
+}
+
+/* Select boxes */
+div[data-baseweb="select"] > div {
+    background-color: #ffffff !important;
+    color: #172033 !important;
+    border-color: #9fb3c8 !important;
+}
+
+div[data-baseweb="select"] span {
+    color: #172033 !important;
+}
+
+/* File uploader */
+section[data-testid="stFileUploader"] {
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: #155eef;
+    color: white !important;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.stButton > button:hover {
+    background-color: #0b4f9c;
+    color: white !important;
+}
+
+/* Metrics */
+div[data-testid="stMetric"] {
+    background-color: #ffffff;
+    border: 1px solid #d9e2ec;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+div[data-testid="stMetric"] label {
+    color: #52606d !important;
+}
+
+div[data-testid="stMetricValue"] {
+    color: #102a43 !important;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    color: #52606d !important;
+    padding: 30px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ==================================================
 # SIDEBAR
@@ -128,9 +197,7 @@ st.session_state.page = page
 
 st.sidebar.divider()
 
-st.sidebar.info(
-    "Report • Track • Resolve"
-)
+st.sidebar.info("Report • Track • Resolve")
 
 # ==================================================
 # HOME
@@ -146,10 +213,7 @@ if page == "🏠 Home":
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown(
-        '<div class="section-title">Choose your portal</div>',
-        unsafe_allow_html=True
-    )
+    st.header("Choose your portal")
 
     col1, col2 = st.columns(2)
 
@@ -193,10 +257,7 @@ if page == "🏠 Home":
 
     st.divider()
 
-    st.markdown(
-        '<div class="section-title">How FixMyCampus works</div>',
-        unsafe_allow_html=True
-    )
+    st.header("How FixMyCampus works")
 
     a, b, c = st.columns(3)
 
@@ -243,8 +304,6 @@ elif page == "👨‍🎓 Student Portal":
         "Report a campus issue or track an existing complaint."
     )
 
-    # ---------------- SUMMARY ----------------
-
     cursor.execute("SELECT COUNT(*) FROM complaints")
     total = cursor.fetchone()[0]
 
@@ -279,12 +338,7 @@ elif page == "👨‍🎓 Student Portal":
 
     st.divider()
 
-    # ---------------- REPORT ----------------
-
-    st.markdown(
-        '<div class="section-title">📝 Report a Problem</div>',
-        unsafe_allow_html=True
-    )
+    st.header("📝 Report a Problem")
 
     with st.container(border=True):
 
@@ -365,14 +419,9 @@ elif page == "👨‍🎓 Student Portal":
                     "Please enter the location and description."
                 )
 
-    # ---------------- TRACK ----------------
-
     st.divider()
 
-    st.markdown(
-        '<div class="section-title">🔎 Track Your Complaint</div>',
-        unsafe_allow_html=True
-    )
+    st.header("🔎 Track Your Complaint")
 
     with st.container(border=True):
 
@@ -470,8 +519,6 @@ elif page == "🔐 Admin Portal":
             st.session_state.admin = False
             st.rerun()
 
-        # ---------------- SUMMARY ----------------
-
         cursor.execute(
             "SELECT COUNT(*) FROM complaints"
         )
@@ -507,8 +554,6 @@ elif page == "🔐 Admin Portal":
             st.metric("🟢 Resolved", resolved)
 
         st.divider()
-
-        # ---------------- COMPLAINTS ----------------
 
         cursor.execute(
             """
